@@ -1,5 +1,6 @@
 package com.infra4u.billing_manager_service.controller;
 
+import com.infra4u.billing_manager_service.model.http.response.Wrapper;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.CreateBilling;
 import com.infra4u.billing_manager_service.use_case.billing.LoadedBilling;
@@ -21,13 +22,13 @@ public class BillingController {
 
     @GetMapping
     @Operation(summary = "Load all", description = "Load all billings with params")
-    public Collection<LoadedBilling> loadAll() {
-        return billingService.loadAll();
+    public Wrapper<Collection<LoadedBilling>> loadAll() {
+        return Wrapper.of(billingService.loadAll());
     }
 
     @PostMapping
     @Operation(summary = "Save Billing", description = "Sabe billing")
-    public LoadedBilling save(CreateBilling create) {
-        return billingService.create(create);
+    public Wrapper<LoadedBilling> save(CreateBilling create) {
+        return Wrapper.of(billingService.create(create));
     }
 }
