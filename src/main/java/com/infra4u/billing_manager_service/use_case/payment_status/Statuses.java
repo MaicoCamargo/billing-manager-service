@@ -9,8 +9,8 @@ public enum Statuses {
     FAILED(3L),       // Pagamento falhou
     LATE(4L),         // Pagamento atrasado
     CANCELED(5L),     // Pagamento cancelado
-    REFUND(5L),       // Pagamento estornado
-    IN_PROGRESS(6L),  // Pagamento em andamento
+    REFUND(6L),       // Pagamento estornado
+    IN_PROGRESS(7L),  // Pagamento em andamento
     ;
 
     private final Long status;
