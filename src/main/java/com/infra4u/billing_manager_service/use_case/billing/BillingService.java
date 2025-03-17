@@ -5,5 +5,5 @@ import java.util.Collection;
 public interface BillingService {
 
     Collection<LoadedBilling> loadAll();
-    LoadedBilling create(CreateBilling billing);
+    LoadedBilling create(PaidBilling paid);
 }

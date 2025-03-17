@@ -26,6 +26,7 @@ public class Billing {
     @JoinColumn(name = "type_id")
     private BillingType billingType;
 
+    @Getter
     private BigDecimal amount;
 
     @Column(name = "order_id")
@@ -46,18 +47,19 @@ public class Billing {
     @OneToMany(mappedBy = "billing")
     private List<BillingStatus> billingStatuses;
 
-    @OneToMany(mappedBy = "billing")
+    @OneToMany(mappedBy = "billing", cascade = CascadeType.ALL)
     private List<Payment> payments;
 
-    public Billing(String name, String description, BillingType billingType, BigDecimal amount, Long orderId, Integer installmentCount) {
+    public Billing(String name, String description, BigDecimal amount, Integer installmentCount, Long orderId, List<Payment> payments) {
         this.name = name;
         this.description = description;
-        this.billingType = billingType;
         this.amount = amount;
         this.orderId = orderId;
         this.installmentCount = installmentCount;
         this.serviceId = 0L;
         this.userId = 0L;
         this.createdAt = LocalDateTime.now();
+        payments.forEach(payment -> payment.setBilling(this));
+        this.payments = payments;
     }
 }

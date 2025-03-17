@@ -1,10 +1,12 @@
 package com.infra4u.billing_manager_service.entity;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
 public class PaymentType {
 
     @Id
@@ -16,5 +18,7 @@ public class PaymentType {
     @OneToMany(mappedBy = "paymentType")
     private List<Payment> payments;
 
-    // Getters and Setters
+    public PaymentType(Long id) {
+        this.id = id;
+    }
 }

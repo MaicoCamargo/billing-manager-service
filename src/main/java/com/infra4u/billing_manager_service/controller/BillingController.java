@@ -2,14 +2,11 @@ package com.infra4u.billing_manager_service.controller;
 
 import com.infra4u.billing_manager_service.model.http.response.Wrapper;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
-import com.infra4u.billing_manager_service.use_case.billing.CreateBilling;
 import com.infra4u.billing_manager_service.use_case.billing.LoadedBilling;
+import com.infra4u.billing_manager_service.use_case.billing.PaidBilling;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -26,9 +23,9 @@ public class BillingController {
         return Wrapper.of(billingService.loadAll());
     }
 
-    @PostMapping
+    @PostMapping("paid")
     @Operation(summary = "Save Billing", description = "Sabe billing")
-    public Wrapper<LoadedBilling> save(CreateBilling create) {
-        return Wrapper.of(billingService.create(create));
+    public Wrapper<LoadedBilling> save(@RequestBody PaidBilling paid) {
+        return Wrapper.of(billingService.create(paid));
     }
 }
