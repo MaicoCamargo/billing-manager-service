@@ -2,8 +2,8 @@ package com.infra4u.billing_manager_service.controller;
 
 import com.infra4u.billing_manager_service.model.http.response.Wrapper;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
-import com.infra4u.billing_manager_service.use_case.billing.LoadedBilling;
-import com.infra4u.billing_manager_service.use_case.billing.PaidBilling;
+import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

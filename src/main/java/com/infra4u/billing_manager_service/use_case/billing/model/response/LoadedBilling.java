@@ -1,4 +1,4 @@
-package com.infra4u.billing_manager_service.use_case.billing;
+package com.infra4u.billing_manager_service.use_case.billing.model.response;
 
 import com.infra4u.billing_manager_service.entity.Payment;
 
