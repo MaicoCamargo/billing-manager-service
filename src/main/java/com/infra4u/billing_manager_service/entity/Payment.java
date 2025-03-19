@@ -40,14 +40,14 @@ public class Payment {
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
     private List<PaymentStatus> paymentStatuses;
 
-    public Payment(BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate, PaymentStatus status) {
+    public Payment(BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate, List<PaymentStatus> statuses) {
         this.value = value;
         this.installment = installment;
         this.paymentType = paymentType;
         this.expirationDate = expirationDate;
         this.createdAt = LocalDateTime.now();
-        status.setPayment(this);
-        this.paymentStatuses = Collections.singletonList(status);
+        statuses.forEach(stat -> stat.setPayment(this));
+        this.paymentStatuses = statuses;
     }
 
     public Payment(BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate) {
