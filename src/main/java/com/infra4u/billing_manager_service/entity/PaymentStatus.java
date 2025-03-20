@@ -24,9 +24,11 @@ public class PaymentStatus {
     @ManyToOne
     @JoinColumn(name = "status_id")
     @Setter
+    @Getter
     private Status status;
 
     @Column(name = "created_at")
+    @Getter
     private LocalDateTime createdAt;
 
     public PaymentStatus(Status status) {

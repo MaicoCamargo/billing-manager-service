@@ -18,6 +18,7 @@ public class Status {
     private Long id;
 
     @Setter
+    @Getter
     private String name;
 
     @OneToMany(mappedBy = "status")

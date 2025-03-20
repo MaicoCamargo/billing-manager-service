@@ -2,11 +2,13 @@ package com.infra4u.billing_manager_service.entity;
 
 import com.infra4u.billing_manager_service.use_case.payment_status.Statuses;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,8 +18,10 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
+    @Getter
     private BigDecimal value;
 
     @Column(name = "created_at")
@@ -28,16 +32,20 @@ public class Payment {
     @Setter
     private Billing billing;
 
+    @Getter
     private Integer installment;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
+    @Getter
     private PaymentType paymentType;
 
     @Column(name = "expiration_date")
+    @Getter
     private LocalDateTime expirationDate;
 
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Getter
     private List<PaymentStatus> paymentStatuses;
 
     public Payment(BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate, List<PaymentStatus> statuses) {

@@ -47,7 +47,8 @@ public class Billing {
     @OneToMany(mappedBy = "billing")
     private List<BillingStatus> billingStatuses;
 
-    @OneToMany(mappedBy = "billing", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "billing", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Getter
     private List<Payment> payments;
 
     public Billing(String name, String description, BigDecimal amount, Integer installmentCount, Long orderId, List<Payment> payments) {
