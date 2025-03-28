@@ -18,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Tag(name = "Billing", description = "Billing management APIs")
 public class BillingServiceImpl implements BillingService {
 
     private final BillingRepository repository;
