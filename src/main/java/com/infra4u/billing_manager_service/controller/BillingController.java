@@ -6,6 +6,7 @@ import com.infra4u.billing_manager_service.use_case.billing.model.request.Create
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("billings")
+@Tag(name = "Billing", description = "Billing management APIs")
 public class BillingController {
 
     private final BillingService billingService;
