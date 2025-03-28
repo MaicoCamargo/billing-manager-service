@@ -25,7 +25,7 @@ public class LoadedBillingMapperStrategy implements BillingMapperStrategy<Loaded
     }
 
     private LoadedStatus currentStatus(List<PaymentStatus> statuses) {
-        statuses.sort(Comparator.comparing(PaymentStatus::getCreatedAt).reversed());
+        statuses = statuses.stream().sorted(Comparator.comparing(PaymentStatus::getCreatedAt)).toList();
         PaymentStatus paymentStatus = statuses.getFirst();
         return new LoadedStatus(paymentStatus.getStatus().getName(), paymentStatus.getStatus().getId(), paymentStatus.getCreatedAt());
     }
