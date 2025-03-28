@@ -1,18 +1,18 @@
 package com.infra4u.billing_manager_service.service;
 
-import com.infra4u.billing_manager_service.entity.*;
-import com.infra4u.billing_manager_service.use_case.billing.*;
+import com.infra4u.billing_manager_service.entity.Billing;
+import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
+import com.infra4u.billing_manager_service.use_case.billing.BillingService;
+import com.infra4u.billing_manager_service.use_case.billing.mapper.CreateBillingMapperStrategy;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.LoadedBillingMapperStrategy;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.PaidBillingMapperStrategy;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
-import com.infra4u.billing_manager_service.use_case.payment_status.Statuses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,6 +22,7 @@ public class BillingServiceImpl implements BillingService {
     private final BillingRepository repository;
     private final LoadedBillingMapperStrategy loadedBillingMapperStrategy;
     private final PaidBillingMapperStrategy paidBillingMapperStrategy;
+    private final CreateBillingMapperStrategy createBillingMapperStrategy;
 
     @Override
     public Collection<LoadedBilling> loadAll() {
@@ -33,5 +34,11 @@ public class BillingServiceImpl implements BillingService {
     public LoadedBilling create(PaidBilling paid) {
         Billing saved = repository.save(paidBillingMapperStrategy.map(paid));
         return loadedBillingMapperStrategy.map(saved);
+    }
+
+    @Override
+    public LoadedBilling create(CreateBilling billing) {
+        final Billing save = repository.save(createBillingMapperStrategy.map(billing));
+        return loadedBillingMapperStrategy.map(save);
     }
 }

@@ -1,0 +1,46 @@
+package com.infra4u.billing_manager_service.use_case.billing.mapper;
+
+import com.infra4u.billing_manager_service.entity.Billing;
+import com.infra4u.billing_manager_service.entity.Payment;
+import com.infra4u.billing_manager_service.entity.PaymentType;
+import com.infra4u.billing_manager_service.use_case.billing.BillingMapperStrategy;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.FuturePayment;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billing, CreateBilling> {
+    @Override
+    public Billing map(CreateBilling billing) {
+        final BigDecimal total = billing.futurePayments().stream()
+                .map(FuturePayment::value)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        final List<Payment> payments = billing.futurePayments()
+                .stream()
+                .map(payment -> {
+                    final PaymentType paymentType = new PaymentType(payment.status().getStatus());
+                    return new Payment(payment.value(), 1, paymentType, payment.expiresAt());
+                }).toList();
+
+        // todo verificar se total e billing.amount sao o mesmo valor, caso nao retornar erro
+        return new Billing(
+                billing.name(),
+                billing.description(),
+                total,
+                billing.futurePayments().size(),
+                billing.order(),
+                payments
+        );
+    }
+
+    @Override
+    public Collection<Billing> map(Collection<CreateBilling> billings) {
+        return billings.stream().map(this::map).collect(Collectors.toList());
+    }
+}

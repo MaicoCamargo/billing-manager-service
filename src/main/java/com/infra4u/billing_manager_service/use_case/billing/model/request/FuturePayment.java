@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record FuturePayment(BigDecimal value, LocalDateTime expiresAt, Statuses status, Types type) {
-    public FuturePayment(BigDecimal value, LocalDateTime expiresAt,Types type) {
+    public FuturePayment(BigDecimal value, LocalDateTime expiresAt, Types type) {
         this(value, expiresAt, Statuses.PENDING, type);
     }
 }
