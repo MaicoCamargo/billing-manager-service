@@ -9,6 +9,7 @@ import com.infra4u.billing_manager_service.use_case.billing.model.request.Future
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billin
                 .stream()
                 .map(payment -> {
                     final PaymentType paymentType = new PaymentType(payment.status().getStatus());
-                    return new Payment(payment.value(), 1, paymentType, payment.expiresAt());
+                    return new Payment(payment.value(), 1, paymentType, payment.expiresAt().atTime(LocalTime.MAX));
                 }).toList();
 
         // todo verificar se total e billing.amount sao o mesmo valor, caso nao retornar erro
