@@ -4,6 +4,7 @@ import com.infra4u.billing_manager_service.entity.Billing;
 import com.infra4u.billing_manager_service.entity.Payment;
 import com.infra4u.billing_manager_service.entity.PaymentType;
 import com.infra4u.billing_manager_service.use_case.billing.BillingMapperStrategy;
+import com.infra4u.billing_manager_service.use_case.billing.model.Types;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.FuturePayment;
 import org.springframework.stereotype.Component;
@@ -24,10 +25,7 @@ public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billin
 
         final List<Payment> payments = billing.futurePayments()
                 .stream()
-                .map(payment -> {
-                    final PaymentType paymentType = new PaymentType(payment.status().getStatus());
-                    return new Payment(payment.value(), 1, paymentType, payment.expiresAt().atTime(LocalTime.MAX));
-                }).toList();
+                .map((payment) -> new Payment(payment.value(), 1, this.paymentType(payment.type().getId()), payment.expiresAt().atTime(LocalTime.MAX))).toList();
 
         // todo verificar se total e billing.amount sao o mesmo valor, caso nao retornar erro
         return new Billing(
@@ -43,5 +41,10 @@ public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billin
     @Override
     public Collection<Billing> map(Collection<CreateBilling> billings) {
         return billings.stream().map(this::map).collect(Collectors.toList());
+    }
+
+    private PaymentType paymentType(Long id){
+        final Types type = Types.getById(id);
+        return new PaymentType(type.name(), type.getId());
     }
 }

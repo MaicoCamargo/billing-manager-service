@@ -64,7 +64,8 @@ public class Payment {
         this.paymentType = paymentType;
         this.expirationDate = expirationDate;
         this.createdAt = LocalDateTime.now();
-        PaymentStatus status = new PaymentStatus(new Status(Statuses.PENDING.getStatus()));
+        PaymentStatus status = new PaymentStatus(new Status(Statuses.PENDING.getStatus(), Statuses.PENDING.name()));
+        status.setPayment(this);
         this.paymentStatuses = Collections.singletonList(status);
     }
 }
