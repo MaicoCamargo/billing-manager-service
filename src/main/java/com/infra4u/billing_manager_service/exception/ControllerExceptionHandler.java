@@ -4,6 +4,7 @@ import com.infra4u.billing_manager_service.model.http.response.ErrorMessage;
 import com.infra4u.billing_manager_service.model.http.response.Metadata;
 import com.infra4u.billing_manager_service.model.http.response.Wrapper;
 import io.swagger.v3.oas.annotations.Hidden;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Hidden
 @RestControllerAdvice
+@Slf4j
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(UnprocessableEntityException.class)
@@ -36,7 +38,7 @@ public class ControllerExceptionHandler {
         ErrorMessage message = new ErrorMessage(
                 ex.getMessage(),
                 request.getDescription(false));
-
+        log.error(ex.getMessage(), ex);
         return Wrapper.of(message, Metadata.of("Request processed with error"));
     }
 
