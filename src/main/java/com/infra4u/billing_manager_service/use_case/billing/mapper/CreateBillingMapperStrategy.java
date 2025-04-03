@@ -23,15 +23,16 @@ public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billin
                 .map(FuturePayment::value)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // @todo verificar por que esta sempre inserindo installment 1
         final List<Payment> payments = billing.futurePayments()
                 .stream()
                 .map((payment) -> new Payment(payment.value(), 1, this.paymentType(payment.type().getId()), payment.expiresAt().atTime(LocalTime.MAX))).toList();
 
-        // todo verificar se total e billing.amount sao o mesmo valor, caso nao retornar erro
+        // todo verificar se valor dos pagamentos (total) nao é maior que billing.amount caso sim retornar erro
         return new Billing(
                 billing.name(),
                 billing.description(),
-                total,
+                billing.amount(),
                 billing.futurePayments().size(),
                 billing.order(),
                 payments

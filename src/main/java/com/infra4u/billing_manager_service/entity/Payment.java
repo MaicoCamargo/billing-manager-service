@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,9 +18,11 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
+    @Setter
     private Long id;
 
     @Getter
+    @Setter
     private BigDecimal value;
 
     @Column(name = "created_at")
@@ -38,6 +39,7 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "type_id")
     @Getter
+    @Setter
     private PaymentType paymentType;
 
     @Column(name = "expiration_date")
@@ -46,6 +48,7 @@ public class Payment {
 
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Getter
+    @Setter
     private List<PaymentStatus> paymentStatuses;
 
     public Payment(BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate, List<PaymentStatus> statuses) {
@@ -64,7 +67,7 @@ public class Payment {
         this.paymentType = paymentType;
         this.expirationDate = expirationDate;
         this.createdAt = LocalDateTime.now();
-        PaymentStatus status = new PaymentStatus(new Status(Statuses.PENDING.getStatus(), Statuses.PENDING.name()));
+        PaymentStatus status = new PaymentStatus(new Status(Statuses.PENDING.getId(), Statuses.PENDING.name()));
         status.setPayment(this);
         this.paymentStatuses = Collections.singletonList(status);
     }

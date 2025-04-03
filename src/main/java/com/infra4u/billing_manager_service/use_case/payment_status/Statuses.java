@@ -2,6 +2,8 @@ package com.infra4u.billing_manager_service.use_case.payment_status;
 
 import lombok.Getter;
 
+import java.util.stream.Stream;
+
 @Getter
 public enum Statuses {
     PENDING(1L),      // Pagamento pendente
@@ -13,9 +15,17 @@ public enum Statuses {
     IN_PROGRESS(7L),  // Pagamento em andamento
     ;
 
-    private final Long status;
+    private final Long id;
 
-    Statuses(Long status) {
-        this.status = status;
+    Statuses(Long id) {
+        this.id = id;
+    }
+
+    public static Statuses getById(final Long id) {
+
+        return Stream.of(values())
+                .filter(status -> status.id.equals(id))
+                .findFirst()
+                .orElse(Statuses.PENDING);
     }
 }

@@ -35,8 +35,8 @@ public class PaidBillingMapperStrategy implements BillingMapperStrategy<Billing,
     }
 
     private List<PaymentStatus> statuses(){
-        PaymentStatus pending = new PaymentStatus(new Status(Statuses.PENDING.getStatus(), Statuses.PENDING.name()));
-        PaymentStatus completed = new PaymentStatus(new Status(Statuses.COMPLETED.getStatus(), Statuses.COMPLETED.name()));
+        PaymentStatus pending = new PaymentStatus(new Status(Statuses.PENDING.getId(), Statuses.PENDING.name()));
+        PaymentStatus completed = new PaymentStatus(new Status(Statuses.COMPLETED.getId(), Statuses.COMPLETED.name()));
         List<PaymentStatus> status = new ArrayList<>();
         status.add(pending);
         status.add(completed);

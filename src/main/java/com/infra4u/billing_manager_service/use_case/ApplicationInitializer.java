@@ -29,7 +29,7 @@ public class ApplicationInitializer {
         // @fixme verificar por que está dando erro no criar os status
         log.info("[status] Initializing...");
         Collection<Status> statusCollection = Stream.of(Statuses.values())
-                .map(status -> new Status(status.getStatus(), status.name()))
+                .map(status -> new Status(status.getId(), status.name()))
                 .toList();
         log.info("[status] Initialized.");
     }
