@@ -26,6 +26,7 @@ public class Payment {
     private BigDecimal value;
 
     @Column(name = "created_at")
+    @Getter
     private LocalDateTime createdAt;
 
     @ManyToOne
