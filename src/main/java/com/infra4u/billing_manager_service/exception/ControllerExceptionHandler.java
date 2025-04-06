@@ -62,4 +62,14 @@ public class ControllerExceptionHandler {
 
         return Wrapper.of(message, Metadata.of("Request processed with error"));
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public Wrapper<ErrorMessage> handleNotFoundException(NotFoundException notFoundException, WebRequest request) {
+        ErrorMessage message = new ErrorMessage(
+                notFoundException.getMessage(),
+                request.getDescription(false));
+
+        return Wrapper.of(message, Metadata.of("Request processed with error"));
+    }
 }

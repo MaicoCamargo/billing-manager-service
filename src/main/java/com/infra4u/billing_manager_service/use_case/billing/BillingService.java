@@ -11,4 +11,5 @@ public interface BillingService {
     Collection<LoadedBilling> loadAll();
     LoadedBilling create(PaidBilling paid);
     LoadedBilling create(CreateBilling billing);
+    LoadedBilling loadById(Long id);
 }

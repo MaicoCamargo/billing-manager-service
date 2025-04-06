@@ -1,6 +1,7 @@
 package com.infra4u.billing_manager_service.service;
 
 import com.infra4u.billing_manager_service.entity.Billing;
+import com.infra4u.billing_manager_service.exception.NotFoundException;
 import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.CreateBillingMapperStrategy;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +42,14 @@ public class BillingServiceImpl implements BillingService {
     public LoadedBilling create(CreateBilling billing) {
         final Billing save = repository.save(createBillingMapperStrategy.map(billing));
         return loadedBillingMapperStrategy.map(save);
+    }
+
+    @Override
+    public LoadedBilling loadById(Long id) {
+        final Optional<Billing> byId = repository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Billing with id " + id + " not found");
+        }
+        return loadedBillingMapperStrategy.map(byId.get());
     }
 }

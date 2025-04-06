@@ -37,4 +37,11 @@ public class BillingController {
     public Wrapper<LoadedBilling> save(@RequestBody CreateBilling billing) {
         return Wrapper.of(billingService.create(billing));
     }
+
+    @GetMapping("{id}")
+    @Operation(summary = "Load billing", description = "Load billing by id")
+    public Wrapper<LoadedBilling> loadById(@PathVariable Long id) {
+        return Wrapper.of(billingService.loadById(id));
+    }
+
 }
