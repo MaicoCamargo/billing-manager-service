@@ -44,4 +44,10 @@ public class BillingController {
         return Wrapper.of(billingService.loadById(id));
     }
 
+    @GetMapping("order/{order}")
+    @Operation(summary = "Load billing", description = "Load billing by order id")
+    public Wrapper<Collection<LoadedBilling>> loadByOrderId(@PathVariable Long order) {
+        return Wrapper.of(billingService.loadByOrder(order));
+    }
+
 }

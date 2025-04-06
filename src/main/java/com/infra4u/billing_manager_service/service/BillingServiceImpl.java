@@ -52,4 +52,10 @@ public class BillingServiceImpl implements BillingService {
         }
         return loadedBillingMapperStrategy.map(byId.get());
     }
+
+    @Override
+    public Collection<LoadedBilling> loadByOrder(Long order) {
+        final Collection<Billing> byOrderId = repository.findByOrderId(order);
+        return loadedBillingMapperStrategy.map(byOrderId);
+    }
 }
