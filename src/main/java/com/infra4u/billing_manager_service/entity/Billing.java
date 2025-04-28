@@ -32,18 +32,21 @@ public class Billing {
     private BigDecimal amount;
 
     @Column(name = "order_id")
+    @Getter
     private Long orderId;
 
     @Column(name = "installment_count")
     private Integer installmentCount;
 
     @Column(name = "service_id")
+    @Getter
     private Long serviceId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "user_id")
+    @Getter
     private Long userId;
 
     @OneToMany(mappedBy = "billing")
@@ -53,14 +56,14 @@ public class Billing {
     @Getter
     private List<Payment> payments;
 
-    public Billing(String name, String description, BigDecimal amount, Integer installmentCount, Long orderId, List<Payment> payments) {
+    public Billing(String name, String description, BigDecimal amount, Integer installmentCount, Long orderId, Long serviceId, Long userId, List<Payment> payments) {
         this.name = name;
         this.description = description;
         this.amount = amount;
         this.orderId = orderId;
         this.installmentCount = installmentCount;
-        this.serviceId = 0L;
-        this.userId = 0L;
+        this.serviceId = serviceId;
+        this.userId = userId;
         this.createdAt = LocalDateTime.now();
         payments.forEach(payment -> payment.setBilling(this));
         this.payments = payments;
