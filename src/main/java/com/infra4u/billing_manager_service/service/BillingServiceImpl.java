@@ -7,8 +7,10 @@ import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.CreateBillingMapperStrategy;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.LoadedBillingMapperStrategy;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.PaidBillingMapperStrategy;
+import com.infra4u.billing_manager_service.use_case.billing.mapper.SimpleBillingMapperStrategy;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class BillingServiceImpl implements BillingService {
     private final LoadedBillingMapperStrategy loadedBillingMapperStrategy;
     private final PaidBillingMapperStrategy paidBillingMapperStrategy;
     private final CreateBillingMapperStrategy createBillingMapperStrategy;
+    private final SimpleBillingMapperStrategy simpleBillingMapperStrategy;
 
     @Override
     public Collection<LoadedBilling> loadAll() {
@@ -42,6 +45,12 @@ public class BillingServiceImpl implements BillingService {
     public LoadedBilling create(CreateBilling billing) {
         final Billing save = repository.save(createBillingMapperStrategy.map(billing));
         return loadedBillingMapperStrategy.map(save);
+    }
+
+    @Override
+    public LoadedBilling create(SimpleBilling billing) {
+        final Billing saved = repository.save(simpleBillingMapperStrategy.map(billing));
+        return loadedBillingMapperStrategy.map(saved);
     }
 
     @Override
