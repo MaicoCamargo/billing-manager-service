@@ -6,9 +6,11 @@ import java.util.stream.Stream;
 
 @Getter
 public enum Types {
-    CASH(1),
-    CARD(2),
-    BANK_SLIP(3);
+    CASH_ON_DELIVERY(1), // Dinheiro á vista
+    DEBIT_CARD(2),
+    CREDIT_CARD(3),
+    BANK_SLIP(4), // boleto
+    INSTALLMENT_CASH(5); // Dinheiro parcelado
 
     private final Long id;
 
@@ -21,6 +23,6 @@ public enum Types {
         return Stream.of(values())
                 .filter(type -> type.id.equals(id))
                 .findFirst()
-                .orElse(Types.CASH);
+                .orElse(Types.CASH_ON_DELIVERY);
     }
 }
