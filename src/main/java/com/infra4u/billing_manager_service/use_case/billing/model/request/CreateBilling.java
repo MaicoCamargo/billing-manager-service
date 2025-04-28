@@ -8,7 +8,8 @@ public record CreateBilling(
         String description,
         BigDecimal amount,
         Long order,
-        Integer user,
+        Long user,
+        Long service,
         List<FuturePayment> futurePayments
 ) {
 }

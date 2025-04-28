@@ -26,7 +26,7 @@ public class PaidBillingMapperStrategy implements BillingMapperStrategy<Billing,
     public Billing map(PaidBilling paid) {
         final Integer ONLY_ONE_INSTALLMENT = 1;
         Payment payment = new Payment(paid.amount(), ONLY_ONE_INSTALLMENT, type(paid.type().getId()), LocalDateTime.now(), statuses());
-        return new Billing(paid.name(), paid.description(), paid.amount(), ONLY_ONE_INSTALLMENT, paid.order(), Collections.singletonList(payment));
+        return new Billing(paid.name(), paid.description(), paid.amount(), ONLY_ONE_INSTALLMENT, paid.order(), paid.service().longValue(), paid.user().longValue(), Collections.singletonList(payment));
     }
 
     @Override

@@ -10,5 +10,6 @@ public record PaidBilling(
         Types type,
         BigDecimal amount,
         Long order,
-        Integer user) {
+        Long user,
+        Long service) {
 }
