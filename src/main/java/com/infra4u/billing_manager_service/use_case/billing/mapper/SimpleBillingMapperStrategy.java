@@ -1,12 +1,11 @@
 package com.infra4u.billing_manager_service.use_case.billing.mapper;
 
-import com.infra4u.billing_manager_service.entity.Billing;
-import com.infra4u.billing_manager_service.entity.Payment;
-import com.infra4u.billing_manager_service.entity.PaymentType;
+import com.infra4u.billing_manager_service.entity.*;
 import com.infra4u.billing_manager_service.use_case.billing.BillingMapperStrategy;
 import com.infra4u.billing_manager_service.use_case.billing.model.Types;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimplePayment;
+import com.infra4u.billing_manager_service.use_case.payment_status.Statuses;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -32,7 +31,7 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
                 .forEach((payment) -> {
                     LocalDateTime hoje = LocalDateTime.now();
                     for (int i = 1; i <= payment.installments(); i++) {
-                        LocalDateTime nextMonth =  hoje.plusMonths(1).withDayOfMonth(1).with(TemporalAdjusters.firstDayOfNextMonth())
+                        LocalDateTime nextMonth =  hoje.plusMonths(i-1).withDayOfMonth(1).with(TemporalAdjusters.firstDayOfNextMonth())
                                 .withHour(23)
                                 .withMinute(59)
                                 .withSecond(59);
