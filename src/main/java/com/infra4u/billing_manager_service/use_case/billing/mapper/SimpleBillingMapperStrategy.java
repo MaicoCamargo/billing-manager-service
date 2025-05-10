@@ -35,7 +35,7 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
                                 .withHour(23)
                                 .withMinute(59)
                                 .withSecond(59);
-                        final Payment newPayment = new Payment(payment.value().divide(BigDecimal.valueOf(payment.installments()), RoundingMode.UP), i, this.paymentType(payment.type().getId()), nextMonth);
+                        final Payment newPayment = new Payment(payment.value().divide(BigDecimal.valueOf(payment.installments()), RoundingMode.UP), i, this.paymentType(payment.type().getId()), nextMonth, this.paymentStatuses(payment.type()));
                         payments.add(newPayment);
                     }
                 });
@@ -60,5 +60,17 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
     private PaymentType paymentType(Long id){
         final Types type = Types.getById(id);
         return new PaymentType(type.name(), type.getId());
+    }
+
+    private List<PaymentStatus> paymentStatuses(final Types type) {
+
+        final ArrayList<PaymentStatus> statuses = new ArrayList<>();
+        PaymentStatus pending = new PaymentStatus(new Status(Statuses.PENDING.getId(), Statuses.PENDING.name()));
+        statuses.add(pending);
+        if (Types.CASH_ON_DELIVERY.name().equals(type.name()) || Types.DEBIT_CARD.name().equals(type.name())) {
+             PaymentStatus paid = new PaymentStatus(new Status(Statuses.COMPLETED.getId(), Statuses.COMPLETED.name()));
+             statuses.add(paid);
+        }
+        return statuses;
     }
 }
