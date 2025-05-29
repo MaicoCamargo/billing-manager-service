@@ -8,4 +8,5 @@ import java.util.Collection;
 public interface BillingRepository extends JpaRepository<Billing, Long> {
     Collection<Billing> findByOrderId(Long order);
     Collection<Billing> findByServiceId(Long service);
+    Billing findByServiceIdAndOrderId(Long service, Long order);
 }

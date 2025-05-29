@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -72,5 +73,14 @@ public class BillingServiceImpl implements BillingService {
     public Collection<LoadedBilling> loadByService(Long service) {
         final Collection<Billing> byServiceId = repository.findByServiceId(service);
         return loadedBillingMapperStrategy.map(byServiceId);
+    }
+
+    @Override
+    public LoadedBilling loadByServiceAndOrder(Long service, Long order) {
+        final Billing byServiceIdAndOrderId = repository.findByServiceIdAndOrderId(service, order);
+        if (Objects.isNull(byServiceIdAndOrderId)) {
+            return null;
+        }
+        return loadedBillingMapperStrategy.map(byServiceIdAndOrderId);
     }
 }

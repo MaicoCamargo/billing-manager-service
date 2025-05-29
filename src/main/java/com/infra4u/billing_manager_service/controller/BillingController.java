@@ -8,6 +8,7 @@ import com.infra4u.billing_manager_service.use_case.billing.model.response.Loade
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +62,12 @@ public class BillingController {
     @Operation(summary = "Load billing", description = "Load billing by service id")
     public Wrapper<Collection<LoadedBilling>> loadByServiceId(@PathVariable Long service) {
         return Wrapper.of(billingService.loadByService(service));
+    }
+
+    @GetMapping("service/{service}/order/{order}")
+    @Operation(summary = "Load billing", description = "Load billing by service id and order id")
+    public Wrapper<LoadedBilling> loadByServiceId(@PathVariable @PathParam("1") Long service, @PathVariable Long order) {
+        return Wrapper.of(billingService.loadByServiceAndOrder(service, order));
     }
 
 }
