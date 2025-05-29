@@ -4,17 +4,19 @@ import com.infra4u.billing_manager_service.use_case.billing.model.request.Create
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
+import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
+import org.springframework.data.domain.Page;
 
 import java.util.Collection;
 
 public interface BillingService {
 
-    Collection<LoadedBilling> loadAll();
+    Page<LoadedBilling> loadAll(PageFilter pageFilter);
     LoadedBilling create(PaidBilling paid);
     LoadedBilling create(CreateBilling billing);
     LoadedBilling create(SimpleBilling billing);
     LoadedBilling loadById(Long id);
-    Collection<LoadedBilling> loadByOrder(Long order);
-    Collection<LoadedBilling> loadByService(Long service);
+    Page<LoadedBilling> loadByOrder(Long order);
+    Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter);
     LoadedBilling loadByServiceAndOrder(Long service, Long order);
 }

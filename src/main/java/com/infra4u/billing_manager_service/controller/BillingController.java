@@ -6,6 +6,7 @@ import com.infra4u.billing_manager_service.use_case.billing.model.request.Create
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
+import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
@@ -24,8 +25,8 @@ public class BillingController {
 
     @GetMapping
     @Operation(summary = "Load all", description = "Load all billings with params")
-    public Wrapper<Collection<LoadedBilling>> loadAll() {
-        return Wrapper.of(billingService.loadAll());
+    public Wrapper<Collection<LoadedBilling>> loadAll(PageFilter pageFilter) {
+        return Wrapper.of(billingService.loadAll(pageFilter));
     }
 
     @PostMapping("paid")
@@ -60,8 +61,8 @@ public class BillingController {
 
     @GetMapping("service/{service}")
     @Operation(summary = "Load billing", description = "Load billing by service id")
-    public Wrapper<Collection<LoadedBilling>> loadByServiceId(@PathVariable Long service) {
-        return Wrapper.of(billingService.loadByService(service));
+    public Wrapper<Collection<LoadedBilling>> loadByServiceId(@PathVariable Long service, PageFilter pageFilter) {
+        return Wrapper.of(billingService.loadByService(service, pageFilter));
     }
 
     @GetMapping("service/{service}/order/{order}")

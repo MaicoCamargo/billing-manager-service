@@ -12,11 +12,12 @@ import com.infra4u.billing_manager_service.use_case.billing.model.request.Create
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
+import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,9 +32,9 @@ public class BillingServiceImpl implements BillingService {
     private final SimpleBillingMapperStrategy simpleBillingMapperStrategy;
 
     @Override
-    public Collection<LoadedBilling> loadAll() {
-        List<Billing> all = repository.findAll();
-        return loadedBillingMapperStrategy.map(all);
+    public Page<LoadedBilling> loadAll(final PageFilter pageFilter) {
+        final Page<Billing> all = repository.findAll(pageFilter.map(pageFilter));
+        return all.map(loadedBillingMapperStrategy::map);
     }
 
     @Override
@@ -64,15 +65,15 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public Collection<LoadedBilling> loadByOrder(Long order) {
-        final Collection<Billing> byOrderId = repository.findByOrderId(order);
-        return loadedBillingMapperStrategy.map(byOrderId);
+    public Page<LoadedBilling> loadByOrder(Long order) {
+        final Page<Billing> byOrderId = repository.findByOrderId(order, Pageable.unpaged());
+        return byOrderId.map(loadedBillingMapperStrategy::map);
     }
 
     @Override
-    public Collection<LoadedBilling> loadByService(Long service) {
-        final Collection<Billing> byServiceId = repository.findByServiceId(service);
-        return loadedBillingMapperStrategy.map(byServiceId);
+    public Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter) {
+        final Page<Billing> byServiceId = repository.findByServiceId(service, pageFilter.map(pageFilter));
+        return byServiceId.map(loadedBillingMapperStrategy::map);
     }
 
     @Override
