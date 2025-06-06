@@ -35,4 +35,10 @@ public class PaymentStatus {
         this.status = status;
         this.createdAt = LocalDateTime.now();
     }
+
+    public PaymentStatus(Status status, Payment payment) {
+        this.status = status;
+        this.createdAt = LocalDateTime.now();
+        this.payment = payment;
+    }
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.webjars.NotFoundException;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,8 @@ public class UpdatePaymentMapperStrategy implements PaymentMapperStrategy<Paymen
                 .orElseThrow(() -> new NotFoundException("Payment not found"));
 
         Statuses status = Statuses.getById(data.status().getId());
-        PaymentStatus paymentStatus = new PaymentStatus(new Status(status.getId(), status.name()));
-        payment.setPaymentStatuses(Collections.singletonList(paymentStatus));
+        PaymentStatus paymentStatus = new PaymentStatus(new Status(status.getId(), status.name()), payment);
+        payment.getPaymentStatuses().add(paymentStatus);
         if (Objects.nonNull(data.value())) {
             payment.setValue(data.value());
         }
