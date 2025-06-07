@@ -21,7 +21,7 @@ public class LoadedBillingMapperStrategy implements BillingMapperStrategy<Loaded
                 .stream()
                 .map(payment -> new LoadedPayment(payment.getId(), payment.getValue(), payment.getInstallment(), new LoadedType(payment.getPaymentType().getName(), payment.getPaymentType().getId()), payment.getExpirationDate(), LoadedStatus.of(payment.getPaymentStatuses())))
                 .toList();
-        return new LoadedBilling(billing.getId(), billing.getName(), billing.getDescription(), billing.getAmount(), billing.getOrderId(), billing.getServiceId(), billing.getUserId(), payments);
+        return new LoadedBilling(billing.getId(), billing.getName(), billing.getDescription(), billing.getAmount(), billing.getOrderId(), billing.getCreatedAt(), billing.getUserId(), payments);
     }
 
     @Override

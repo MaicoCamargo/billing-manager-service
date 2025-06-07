@@ -39,10 +39,10 @@ public class Billing {
     private Integer installmentCount;
 
     @Column(name = "service_id")
-    @Getter
     private Long serviceId;
 
     @Column(name = "created_at")
+    @Getter
     private LocalDateTime createdAt;
 
     @Column(name = "user_id")
