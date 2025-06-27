@@ -44,7 +44,7 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
                 billing.name(),
                 billing.description(),
                 billing.amount(),
-                billing.payments().size(),
+                payments.size(),
                 billing.order(),
                 billing.service(),
                 billing.user(),
