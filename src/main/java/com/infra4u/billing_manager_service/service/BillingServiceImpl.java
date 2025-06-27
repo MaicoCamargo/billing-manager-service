@@ -4,13 +4,11 @@ import com.infra4u.billing_manager_service.entity.Billing;
 import com.infra4u.billing_manager_service.exception.NotFoundException;
 import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
-import com.infra4u.billing_manager_service.use_case.billing.mapper.CreateBillingMapperStrategy;
-import com.infra4u.billing_manager_service.use_case.billing.mapper.LoadedBillingMapperStrategy;
-import com.infra4u.billing_manager_service.use_case.billing.mapper.PaidBillingMapperStrategy;
-import com.infra4u.billing_manager_service.use_case.billing.mapper.SimpleBillingMapperStrategy;
+import com.infra4u.billing_manager_service.use_case.billing.mapper.*;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBillingUpdate;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ public class BillingServiceImpl implements BillingService {
     private final PaidBillingMapperStrategy paidBillingMapperStrategy;
     private final CreateBillingMapperStrategy createBillingMapperStrategy;
     private final SimpleBillingMapperStrategy simpleBillingMapperStrategy;
+    private final UpdateBillingMapperStrategy updateBillingMapperStrategy;
 
     @Override
     public Page<LoadedBilling> loadAll(final PageFilter pageFilter) {
@@ -83,5 +82,13 @@ public class BillingServiceImpl implements BillingService {
             return null;
         }
         return loadedBillingMapperStrategy.map(byServiceIdAndOrderId);
+    }
+
+    @Override
+    public LoadedBilling update(Long id, SimpleBilling billing) {
+        final SimpleBillingUpdate simpleBillingUpdate = new SimpleBillingUpdate(billing.name(), billing.description(), billing.amount(), id, billing.user(), billing.service(), billing.payments());
+        final Billing mapped = this.updateBillingMapperStrategy.map(simpleBillingUpdate);
+        final Billing saved = this.repository.save(mapped);
+        return loadedBillingMapperStrategy.map(saved);
     }
 }

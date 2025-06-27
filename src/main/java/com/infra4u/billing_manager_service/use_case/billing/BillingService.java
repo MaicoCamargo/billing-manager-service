@@ -19,4 +19,5 @@ public interface BillingService {
     Page<LoadedBilling> loadByOrder(Long order);
     Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter);
     LoadedBilling loadByServiceAndOrder(Long service, Long order);
+    LoadedBilling update(Long id, SimpleBilling billing);
 }

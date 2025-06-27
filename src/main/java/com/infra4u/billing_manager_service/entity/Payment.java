@@ -52,6 +52,19 @@ public class Payment {
     @Setter
     private List<PaymentStatus> paymentStatuses;
 
+    public Payment(Long billingId, BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate, List<PaymentStatus> statuses) {
+        this.value = value;
+        this.installment = installment;
+        this.paymentType = paymentType;
+        this.expirationDate = expirationDate;
+        this.createdAt = LocalDateTime.now();
+        statuses.forEach(stat -> stat.setPayment(this));
+        this.paymentStatuses = statuses;
+        final Billing billing = new Billing();
+        billing.setId(billingId);
+        this.billing = billing;
+    }
+
     public Payment(BigDecimal value, Integer installment, PaymentType paymentType, LocalDateTime expirationDate, List<PaymentStatus> statuses) {
         this.value = value;
         this.installment = installment;

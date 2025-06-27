@@ -71,4 +71,11 @@ public class BillingController {
         return Wrapper.of(billingService.loadByServiceAndOrder(service, order));
     }
 
+    @PutMapping("{id}")
+    @Operation(summary = "Update an billing", description = "Update billing using the simple form")
+    public Wrapper<LoadedBilling> update(@PathVariable Long id, @RequestBody SimpleBilling simpleBilling) {
+        return Wrapper.of(billingService.update(id, simpleBilling));
+    }
+
+
 }
