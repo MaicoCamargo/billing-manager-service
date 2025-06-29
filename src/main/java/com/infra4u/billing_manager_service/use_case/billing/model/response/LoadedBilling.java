@@ -34,12 +34,10 @@ public record LoadedBilling (Long id, String name, String description, BigDecima
 
         boolean allPaid = payments.stream().allMatch(p -> p.status().id().equals(Statuses.COMPLETED.getId()));
         boolean allCanceled = payments.stream().allMatch(p -> p.status().id().equals(Statuses.CANCELED.getId()));
-        boolean anyPending = payments.stream().allMatch(p -> p.status().id().equals(Statuses.PENDING.getId()));
-        // boolean anyOverdue = payments.stream().anyMatch(p -> Objects.nonNull( p.expirationDate()) && p.expirationDate().isBefore(LocalDate.now().atStartOfDay()));
         boolean anyOverdue = payments.stream().anyMatch(p -> p.status().id().equals(Statuses.LATE.getId()) || p.expirationDate().isBefore(LocalDate.now().atStartOfDay()));
         if (allPaid) return Statuses.COMPLETED;
         if (anyOverdue) return Statuses.LATE;
-        if (anyPending) return Statuses.PENDING;
+        if (!anyOverdue) return Statuses.IN_PROGRESS;
         if (allCanceled) return Statuses.CANCELED;
         return Statuses.IN_PROGRESS;
     }
