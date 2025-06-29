@@ -13,7 +13,9 @@ import com.infra4u.billing_manager_service.use_case.billing.model.response.Loade
 import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -29,10 +31,11 @@ public class BillingServiceImpl implements BillingService {
     private final CreateBillingMapperStrategy createBillingMapperStrategy;
     private final SimpleBillingMapperStrategy simpleBillingMapperStrategy;
     private final UpdateBillingMapperStrategy updateBillingMapperStrategy;
+    private final Sort SORT_BY_CREATED_AT_DESC = Sort.by(Sort.Direction.DESC, "createdAt");
 
     @Override
     public Page<LoadedBilling> loadAll(final PageFilter pageFilter) {
-        final Page<Billing> all = repository.findAll(pageFilter.map(pageFilter));
+        final Page<Billing> all = repository.findAll(pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
         return all.map(loadedBillingMapperStrategy::map);
     }
 
@@ -65,13 +68,13 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public Page<LoadedBilling> loadByOrder(Long order) {
-        final Page<Billing> byOrderId = repository.findByOrderId(order, Pageable.unpaged());
+        final Page<Billing> byOrderId = repository.findByOrderId(order, Pageable.unpaged(SORT_BY_CREATED_AT_DESC));
         return byOrderId.map(loadedBillingMapperStrategy::map);
     }
 
     @Override
     public Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter) {
-        final Page<Billing> byServiceId = repository.findByServiceId(service, pageFilter.map(pageFilter));
+        final Page<Billing> byServiceId = repository.findByServiceId(service, pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
         return byServiceId.map(loadedBillingMapperStrategy::map);
     }
 
