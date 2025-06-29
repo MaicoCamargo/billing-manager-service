@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,6 +69,16 @@ public class ControllerExceptionHandler {
     public Wrapper<ErrorMessage> handleNotFoundException(NotFoundException notFoundException, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 notFoundException.getMessage(),
+                request.getDescription(false));
+
+        return Wrapper.of(message, Metadata.of("Request processed with error"));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public Wrapper<ErrorMessage> handleNoSuchElementException(NoResourceFoundException noResourceFoundException, WebRequest request) {
+        ErrorMessage message = new ErrorMessage(
+                noResourceFoundException.getMessage(),
                 request.getDescription(false));
 
         return Wrapper.of(message, Metadata.of("Request processed with error"));
