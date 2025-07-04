@@ -16,7 +16,7 @@ public interface PageFilterStrategy {
     }
     default Pageable map(PageFilter pageFilter, Sort sort){
         if (Objects.isNull(pageFilter.page()) && Objects.isNull(pageFilter.size())) {
-            return Pageable.unpaged();
+            return Pageable.unpaged(sort);
         }
         return PageRequest.of(pageFilter.page() <= 0  ? 0 : pageFilter.page() - 1, pageFilter.size(), sort);
     }
