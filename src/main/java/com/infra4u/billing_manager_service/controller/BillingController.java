@@ -3,6 +3,7 @@ package com.infra4u.billing_manager_service.controller;
 import com.infra4u.billing_manager_service.model.http.response.Wrapper;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.LoadBillingQueryParams;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
@@ -61,8 +62,8 @@ public class BillingController {
 
     @GetMapping("service/{service}")
     @Operation(summary = "Load billing", description = "Load billing by service id")
-    public Wrapper<Collection<LoadedBilling>> loadByServiceId(@PathVariable Long service, PageFilter pageFilter) {
-        return Wrapper.of(billingService.loadByService(service, pageFilter));
+    public Wrapper<Collection<LoadedBilling>> loadByServiceId(@PathVariable Long service, LoadBillingQueryParams filter) {
+        return Wrapper.of(billingService.loadByService(service, filter));
     }
 
     @GetMapping("service/{service}/order/{order}")

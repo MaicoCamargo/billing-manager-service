@@ -5,19 +5,16 @@ import com.infra4u.billing_manager_service.exception.NotFoundException;
 import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.*;
-import com.infra4u.billing_manager_service.use_case.billing.model.request.CreateBilling;
-import com.infra4u.billing_manager_service.use_case.billing.model.request.PaidBilling;
-import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBilling;
-import com.infra4u.billing_manager_service.use_case.billing.model.request.SimpleBillingUpdate;
+import com.infra4u.billing_manager_service.use_case.billing.model.request.*;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -76,6 +73,22 @@ public class BillingServiceImpl implements BillingService {
     public Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter) {
         final Page<Billing> byServiceId = repository.findByServiceId(service, pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
         return byServiceId.map(loadedBillingMapperStrategy::map);
+    }
+
+    @Override
+    public Page<LoadedBilling> loadByService(Long service, LoadBillingQueryParams filter) {
+        // @todo do filter 'status'
+        final PageFilter pageFilter = new PageFilter(filter.page(), filter.size());
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+        if (Objects.nonNull(filter.startDate())) {
+            startDate = filter.startDate().atStartOfDay();
+        }
+        if (Objects.nonNull(filter.endDate())) {
+            endDate = filter.endDate().atTime(23, 59, 59);
+        }
+        final Page<Billing> byLoadBillingQueryParams = this.repository.findByLoadBillingQueryParams(service, startDate, endDate, filter.user(), pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
+        return byLoadBillingQueryParams.map(loadedBillingMapperStrategy::map);
     }
 
     @Override
