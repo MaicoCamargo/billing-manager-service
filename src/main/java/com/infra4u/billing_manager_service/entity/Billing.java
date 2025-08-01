@@ -8,6 +8,8 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -65,6 +67,11 @@ public class Billing {
     @Setter
     private List<Payment> payments;
 
+    @Column(name = "code", unique = true, length = 6)
+    @Getter
+    @Setter
+    private String code;
+
     public Billing(String name, String description, BigDecimal amount, Integer installmentCount, Long orderId, Long serviceId, Long userId, List<Payment> payments) {
         this.name = name;
         this.description = description;
@@ -76,5 +83,17 @@ public class Billing {
         this.createdAt = LocalDateTime.now();
         payments.forEach(payment -> payment.setBilling(this));
         this.payments = payments;
+        this.code = generateUniqueCode();
+    }
+
+    private String generateUniqueCode() {
+        StringBuilder codeBuilder = new StringBuilder("B");
+        Random random = new Random();
+        String characters = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+        for (int i = 0; i < 5; i++) {
+            int index = random.nextInt(characters.length());
+            codeBuilder.append(characters.charAt(index));
+        }
+        return codeBuilder.toString();
     }
 }
