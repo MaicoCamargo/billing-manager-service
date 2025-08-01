@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 
-public record LoadedBilling (Long id, String name, String description, BigDecimal amount, Long order, LocalDateTime createdAt, Long user, Collection<LoadedPayment> payments, Statuses status) {
+public record LoadedBilling (Long id, String name, String description, BigDecimal amount, Long order, LocalDateTime createdAt, Long user, Collection<LoadedPayment> payments, Statuses status, String code) {
     public LoadedBilling(
             Long id,
             String name,
@@ -17,9 +17,10 @@ public record LoadedBilling (Long id, String name, String description, BigDecima
             Long order,
             LocalDateTime createdAt,
             Long user,
-            Collection<LoadedPayment> payments
+            Collection<LoadedPayment> payments,
+            String code
     ) {
-        this(id, name, description, amount, order, createdAt, user, payments, calculateStatus(payments, amount));
+        this(id, name, description, amount, order, createdAt, user, payments, calculateStatus(payments, amount), code);
     }
     private static Statuses calculateStatus(Collection<LoadedPayment> payments, BigDecimal amount) {
         if (Objects.isNull(payments) || payments.isEmpty()) {
