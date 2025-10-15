@@ -87,7 +87,7 @@ public class BillingServiceImpl implements BillingService {
         if (Objects.nonNull(filter.endDate())) {
             endDate = filter.endDate().atTime(23, 59, 59);
         }
-        final Page<Billing> byLoadBillingQueryParams = this.repository.findByLoadBillingQueryParams(service, startDate, endDate, filter.user(), pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
+        final Page<Billing> byLoadBillingQueryParams = this.repository.findByLoadBillingQueryParams(service, startDate, endDate, filter.user(), filter.code(), filter.order(), pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
         return byLoadBillingQueryParams.map(loadedBillingMapperStrategy::map);
     }
 

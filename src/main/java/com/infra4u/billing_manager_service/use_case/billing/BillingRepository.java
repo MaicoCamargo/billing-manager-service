@@ -21,12 +21,16 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
           AND billing.createdAt >= COALESCE(:startDate, billing.createdAt)
           AND billing.createdAt <= COALESCE(:endDate, billing.createdAt)
           AND (:user IS NULL OR billing.userId = :user)
+          AND (:code IS NULL OR billing.code = :code)
+          AND (:order IS NULL OR billing.orderId = :order)
     """)
     Page<Billing> findByLoadBillingQueryParams(
             @Param("service") Long service,
             @Nullable @Param("startDate") LocalDateTime startDate,
             @Nullable @Param("endDate") LocalDateTime endDate,
             @Nullable @Param("user") Long user,
+            @Nullable @Param("code") String code,
+            @Nullable @Param("order") Long order,
             Pageable pageable);
 
 }

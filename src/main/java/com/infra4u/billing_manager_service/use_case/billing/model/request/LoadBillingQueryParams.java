@@ -11,5 +11,8 @@ public record LoadBillingQueryParams(
         @Schema(description = "Start Date") LocalDate startDate,
         @Schema(description = "End Date") LocalDate endDate,
         @Schema(description = "Status") Statuses status,
-        @Schema(description = "Usuário") Long user) {
+        @Schema(description = "Usuário") Long user,
+        @Schema(description = "Code") String code,
+        @Schema(description = "Order") Long order
+        ) {
 }
