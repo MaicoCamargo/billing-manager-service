@@ -1,15 +1,21 @@
 package com.infra4u.billing_manager_service.config;
 
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+
+import static com.infra4u.billing_manager_service.use_case.http.request.HttpHeader.CLIENT_ID_HEADER;
 
 @Configuration
 public class OpenApi {
@@ -48,6 +54,15 @@ public class OpenApi {
                 .termsOfService("")
                 .license(mitLicense);
 
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+        return new OpenAPI()
+                .components(new Components()
+                        .addParameters(CLIENT_ID_HEADER, new Parameter()
+                                .in(ParameterIn.HEADER.toString())
+                                .name("X-Client-ID")
+                                .required(true)
+                                .schema(new StringSchema())
+                                .description("Client ID"))
+                ).info(info)
+                .servers(List.of(devServer, prodServer));
     }
 }
