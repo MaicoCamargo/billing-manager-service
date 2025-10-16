@@ -13,10 +13,10 @@ import java.util.List;
 
 @Configuration
 public class OpenApi {
-    @Value("${openapi.url.dev}")
+    @Value("${infra4u.openapi.dev-url}")
     private String devUrl;
 
-    @Value("${openapi.url.prod}")
+    @Value("${infra4u.openapi.prod-url}")
     private String prodUrl;
 
     /**
