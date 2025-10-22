@@ -26,8 +26,8 @@ public class ClientIdFilter implements Filter {
                          FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         final String clientID = req.getHeader(CLIENT_ID_HEADER);
-        logger.info("Client id: {}", clientID);
         if (Objects.nonNull(clientID)) {
+            logger.info("Client id: {}", clientID);
             TenantContext.setCurrentTenant(tenantPropertySource.getTenantByClientId(clientID));
         }
         chain.doFilter(request, response);
