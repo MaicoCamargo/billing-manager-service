@@ -36,7 +36,7 @@ public class ClientIdFilter implements Filter {
 
         final String clientID = req.getHeader(CLIENT_ID_HEADER);
         if (Objects.nonNull(clientID)) {
-            logger.info("Client id: {}", clientID);
+            logger.trace("Client id: {}", clientID);
             TenantContext.setCurrentTenant(tenantPropertySource.getTenantByClientId(clientID));
         }
         chain.doFilter(request, response);
