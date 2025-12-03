@@ -21,4 +21,5 @@ public interface BillingService {
     Page<LoadedBilling> loadByService(Long service, LoadBillingQueryParams pageFilter);
     LoadedBilling loadByServiceAndOrder(Long service, Long order);
     LoadedBilling update(Long id, SimpleBilling billing);
+    Void cancel(String code);
 }
