@@ -41,6 +41,14 @@ public class BillingController {
         return Wrapper.of(billingService.create(paid));
     }
 
+    @PatchMapping("{code}/cancel")
+    @Operation(summary = "Cancel Billing", description = "Cancel billing payments", parameters = {
+            @Parameter(ref = "#/components/parameters/X-Client-ID")
+    })
+    public Wrapper<Void> cancel(@PathVariable String code) {
+        return Wrapper.of(billingService.cancel(code));
+    }
+
     @PostMapping
     @Operation(summary = "Save Billing", description = "Save billing", parameters = {
             @Parameter(ref = "#/components/parameters/X-Client-ID")

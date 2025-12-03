@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface BillingRepository extends JpaRepository<Billing, Long> {
     Page<Billing> findByOrderId(Long order, Pageable pageable);
@@ -32,5 +33,5 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
             @Nullable @Param("code") String code,
             @Nullable @Param("order") Long order,
             Pageable pageable);
-
+    Optional<Billing> findByCode(String code);
 }

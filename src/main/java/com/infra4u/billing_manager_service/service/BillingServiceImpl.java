@@ -1,6 +1,9 @@
 package com.infra4u.billing_manager_service.service;
 
 import com.infra4u.billing_manager_service.entity.Billing;
+import com.infra4u.billing_manager_service.entity.Payment;
+import com.infra4u.billing_manager_service.entity.PaymentStatus;
+import com.infra4u.billing_manager_service.entity.Status;
 import com.infra4u.billing_manager_service.exception.NotFoundException;
 import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
@@ -8,6 +11,7 @@ import com.infra4u.billing_manager_service.use_case.billing.mapper.*;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.*;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
+import com.infra4u.billing_manager_service.use_case.payment_status.Statuses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,6 +60,28 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
+    public Void cancel(String code) {
+        final Optional<Billing> billingOptional = repository.findByCode(code);
+        if (billingOptional.isEmpty()) {
+            throw new NotFoundException("Billing with code " + code + " not found");
+        }
+
+        final Billing billing = billingOptional.get();
+        final List<Payment> payments = billing.getPayments();
+
+        if (Objects.nonNull(payments) && !payments.isEmpty()) {
+            payments.forEach(payment -> {
+                final PaymentStatus canceledStatus = new PaymentStatus(
+                        new Status(Statuses.CANCELED.getId(), Statuses.CANCELED.name()),
+                        payment);
+                payment.getPaymentStatuses().add(canceledStatus);
+            });
+        }
+        repository.save(billing);
+        return null;
+    }
+
+    @Override
     public LoadedBilling loadById(Long id) {
         final Optional<Billing> byId = repository.findById(id);
         if (byId.isEmpty()) {
@@ -71,7 +98,8 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter) {
-        final Page<Billing> byServiceId = repository.findByServiceId(service, pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
+        final Page<Billing> byServiceId = repository.findByServiceId(service,
+                pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
         return byServiceId.map(loadedBillingMapperStrategy::map);
     }
 
@@ -87,7 +115,9 @@ public class BillingServiceImpl implements BillingService {
         if (Objects.nonNull(filter.endDate())) {
             endDate = filter.endDate().atTime(23, 59, 59);
         }
-        final Page<Billing> byLoadBillingQueryParams = this.repository.findByLoadBillingQueryParams(service, startDate, endDate, filter.user(), filter.code(), filter.order(), pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
+        final Page<Billing> byLoadBillingQueryParams = this.repository.findByLoadBillingQueryParams(service, startDate,
+                endDate, filter.user(), filter.code(), filter.order(),
+                pageFilter.map(pageFilter, SORT_BY_CREATED_AT_DESC));
         return byLoadBillingQueryParams.map(loadedBillingMapperStrategy::map);
     }
 
@@ -102,7 +132,8 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public LoadedBilling update(Long id, SimpleBilling billing) {
-        final SimpleBillingUpdate simpleBillingUpdate = new SimpleBillingUpdate(billing.name(), billing.description(), billing.amount(), id, billing.user(), billing.service(), billing.payments());
+        final SimpleBillingUpdate simpleBillingUpdate = new SimpleBillingUpdate(billing.name(), billing.description(),
+                billing.amount(), id, billing.user(), billing.service(), billing.payments());
         final Billing mapped = this.updateBillingMapperStrategy.map(simpleBillingUpdate);
         final Billing saved = this.repository.save(mapped);
         return loadedBillingMapperStrategy.map(saved);
