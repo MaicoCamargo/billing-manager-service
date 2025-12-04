@@ -49,6 +49,14 @@ public class BillingController {
         return Wrapper.of(billingService.cancel(code));
     }
 
+    @DeleteMapping("order/{code}")
+    @Operation(summary = "Delete Billing", description = "Delete billing", parameters = {
+            @Parameter(ref = "#/components/parameters/X-Client-ID")
+    })
+    public Wrapper<Void> delete(@PathVariable Long code) {
+        return Wrapper.of(billingService.del(code));
+    }
+
     @PostMapping
     @Operation(summary = "Save Billing", description = "Save billing", parameters = {
             @Parameter(ref = "#/components/parameters/X-Client-ID")

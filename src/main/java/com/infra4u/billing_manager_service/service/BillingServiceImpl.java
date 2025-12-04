@@ -82,6 +82,13 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
+    public Void del(Long code) {
+        final Page<Billing> billingOptional = repository.findByOrderId(code, Pageable.unpaged());
+        billingOptional.stream().findFirst().ifPresent(repository::delete);
+        return null;
+    }
+
+    @Override
     public LoadedBilling loadById(Long id) {
         final Optional<Billing> byId = repository.findById(id);
         if (byId.isEmpty()) {

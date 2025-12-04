@@ -22,4 +22,5 @@ public interface BillingService {
     LoadedBilling loadByServiceAndOrder(Long service, Long order);
     LoadedBilling update(Long id, SimpleBilling billing);
     Void cancel(String code);
+    Void del(Long code);
 }
