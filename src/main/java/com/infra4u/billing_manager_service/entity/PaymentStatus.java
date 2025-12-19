@@ -19,6 +19,7 @@ public class PaymentStatus {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")
     @Setter
+    @Getter
     private Payment payment;
 
     @ManyToOne
