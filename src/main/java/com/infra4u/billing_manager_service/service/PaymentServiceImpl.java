@@ -47,7 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (total.compareTo(billing.get().getAmount()) >= 0){
             throw new RuntimeException("Total amount exceeds billing amount");
         }
-        if (billing.get().getAmount().min(total).compareTo(data.value()) < 0) {
+        if (total.add(data.value()).compareTo(billing.get().getAmount()) > 0) {
             throw new RuntimeException("Total amount exceeds billing amount");
         }
         final Payment saved = paymentRepository.save(createPaymentMapperStrategy.map(data));
