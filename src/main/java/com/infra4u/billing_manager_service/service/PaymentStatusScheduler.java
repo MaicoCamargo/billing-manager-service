@@ -36,7 +36,6 @@ public class PaymentStatusScheduler {
                     Status completedStatus = new Status(Statuses.COMPLETED.getId());
                     PaymentStatus newStatus = new PaymentStatus(completedStatus, payment);
                     payment.getPaymentStatuses().add(newStatus);
-                    System.out.println(payment);
                 }
                 paymentRepository.saveAll(payments);
             } finally {
