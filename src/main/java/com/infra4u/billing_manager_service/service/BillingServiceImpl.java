@@ -1,13 +1,11 @@
 package com.infra4u.billing_manager_service.service;
 
-import com.infra4u.billing_manager_service.entity.Billing;
-import com.infra4u.billing_manager_service.entity.Payment;
-import com.infra4u.billing_manager_service.entity.PaymentStatus;
-import com.infra4u.billing_manager_service.entity.Status;
+import com.infra4u.billing_manager_service.entity.*;
 import com.infra4u.billing_manager_service.exception.NotFoundException;
 import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.*;
+import com.infra4u.billing_manager_service.use_case.billing.model.Types;
 import com.infra4u.billing_manager_service.use_case.billing.model.request.*;
 import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
 import com.infra4u.billing_manager_service.use_case.http.request.PageFilter;
@@ -19,9 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +73,19 @@ public class BillingServiceImpl implements BillingService {
                         payment);
                 payment.getPaymentStatuses().add(canceledStatus);
             });
+        } else {
+            final Payment payment = new Payment(
+                    billing.getAmount(),
+                    0,
+                    new PaymentType(Types.CASH_ON_DELIVERY.name(), Types.CASH_ON_DELIVERY.getId()),
+                    LocalDateTime.now()
+            );
+            final PaymentStatus canceledStatus = new PaymentStatus(
+                    new Status(Statuses.CANCELED.getId(), Statuses.CANCELED.name()),
+                    payment);
+            payment.setBilling(billing);
+            payment.setPaymentStatuses(Collections.singletonList(canceledStatus));
+            billing.setPayments(Collections.singletonList(payment));
         }
         repository.save(billing);
         return null;
