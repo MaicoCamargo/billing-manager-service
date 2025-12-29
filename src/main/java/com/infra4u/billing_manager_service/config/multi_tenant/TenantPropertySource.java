@@ -8,10 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class TenantPropertySource {
                 String[] parts = key.toString().split("\\.");
                 if (parts.length == 3) {
                     String tenantId = parts[0];
-                    String propertyKey = parts[1] + "." + parts[2];
+                    String propertyKey = String.join(".", Arrays.copyOfRange(parts, 1, parts.length));;
                     String propertyValue = value.toString();
                     // Verificar se o valor é uma variável de ambiente com valor padrão
                     if (propertyValue.startsWith("${") && propertyValue.endsWith("}")) {
@@ -57,7 +54,6 @@ public class TenantPropertySource {
 
     /**
      * get tenant name by {@code clientId}
-     *
      * @param clientId client id
      * @return - tenant name
      */
