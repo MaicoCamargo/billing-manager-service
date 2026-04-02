@@ -6,7 +6,7 @@ import java.util.List;
 public record SimpleBilling(String name,
                             String description,
                             BigDecimal amount,
-                            Long order,
+                            String order,
                             Long user,
                             Long service,
                             List<SimplePayment> payments) {

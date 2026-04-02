@@ -9,7 +9,7 @@ public record PaidBilling(
         String description,
         Types type,
         BigDecimal amount,
-        Long order,
+        String order,
         Long user,
         Long service) {
 }

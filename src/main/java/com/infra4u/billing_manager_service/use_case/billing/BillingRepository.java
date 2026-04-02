@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface BillingRepository extends JpaRepository<Billing, Long> {
-    Page<Billing> findByOrderId(Long order, Pageable pageable);
+        Page<Billing> findByOrderId(String order, Pageable pageable);
     Page<Billing> findByServiceId(Long service, Pageable pageable);
-    Billing findByServiceIdAndOrderId(Long service, Long order);
+    Billing findByServiceIdAndOrderId(Long service, String order);
     @Query("""
         SELECT billing
         FROM Billing billing
@@ -31,7 +31,7 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
             @Nullable @Param("endDate") LocalDateTime endDate,
             @Nullable @Param("user") Long user,
             @Nullable @Param("code") String code,
-            @Nullable @Param("order") Long order,
+            @Nullable @Param("order") String order,
             Pageable pageable);
     Optional<Billing> findByCode(String code);
 }

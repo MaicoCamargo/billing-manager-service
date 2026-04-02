@@ -7,7 +7,7 @@ public record CreateBilling(
         String name,
         String description,
         BigDecimal amount,
-        Long order,
+        String order,
         Long user,
         Long service,
         List<FuturePayment> futurePayments

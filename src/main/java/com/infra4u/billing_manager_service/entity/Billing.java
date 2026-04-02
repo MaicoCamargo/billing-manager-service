@@ -41,7 +41,7 @@ public class Billing {
 
     @Column(name = "order_id")
     @Getter
-    private Long orderId;
+    private String orderId;
 
     @Column(name = "installment_count")
     @Setter
@@ -72,7 +72,7 @@ public class Billing {
     @Setter
     private String code;
 
-    public Billing(String name, String description, BigDecimal amount, Integer installmentCount, Long orderId, Long serviceId, Long userId, List<Payment> payments) {
+    public Billing(String name, String description, BigDecimal amount, Integer installmentCount, String orderId, Long serviceId, Long userId, List<Payment> payments) {
         this.name = name;
         this.description = description;
         this.amount = amount;

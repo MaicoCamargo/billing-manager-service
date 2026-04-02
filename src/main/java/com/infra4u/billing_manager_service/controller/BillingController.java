@@ -53,7 +53,7 @@ public class BillingController {
     @Operation(summary = "Delete Billing", description = "Delete billing", parameters = {
             @Parameter(ref = "#/components/parameters/X-Client-ID")
     })
-    public Wrapper<Void> delete(@PathVariable Long code) {
+    public Wrapper<Void> delete(@PathVariable String code) {
         return Wrapper.of(billingService.del(code));
     }
 
@@ -85,7 +85,7 @@ public class BillingController {
     @Operation(summary = "Load billing", description = "Load billing by order id", parameters = {
             @Parameter(ref = "#/components/parameters/X-Client-ID")
     })
-    public Wrapper<Collection<LoadedBilling>> loadByOrderId(@PathVariable Long order) {
+    public Wrapper<Collection<LoadedBilling>> loadByOrderId(@PathVariable String order) {
         return Wrapper.of(billingService.loadByOrder(order));
     }
 
@@ -101,7 +101,7 @@ public class BillingController {
     @Operation(summary = "Load billing", description = "Load billing by service id and order id", parameters = {
             @Parameter(ref = "#/components/parameters/X-Client-ID")
     })
-    public Wrapper<LoadedBilling> loadByServiceId(@PathVariable @PathParam("1") Long service, @PathVariable Long order) {
+    public Wrapper<LoadedBilling> loadByServiceId(@PathVariable @PathParam("1") Long service, @PathVariable String order) {
         return Wrapper.of(billingService.loadByServiceAndOrder(service, order));
     }
 

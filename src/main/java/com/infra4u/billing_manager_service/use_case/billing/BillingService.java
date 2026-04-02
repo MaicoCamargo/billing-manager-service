@@ -16,11 +16,11 @@ public interface BillingService {
     LoadedBilling create(CreateBilling billing);
     LoadedBilling create(SimpleBilling billing);
     LoadedBilling loadById(Long id);
-    Page<LoadedBilling> loadByOrder(Long order);
+    Page<LoadedBilling> loadByOrder(String order);
     Page<LoadedBilling> loadByService(Long service, PageFilter pageFilter);
     Page<LoadedBilling> loadByService(Long service, LoadBillingQueryParams pageFilter);
-    LoadedBilling loadByServiceAndOrder(Long service, Long order);
+    LoadedBilling loadByServiceAndOrder(Long service, String order);
     LoadedBilling update(Long id, SimpleBilling billing);
     Void cancel(String code);
-    Void del(Long code);
+    Void del(String code);
 }
