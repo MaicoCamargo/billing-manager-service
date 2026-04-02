@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 
-public record LoadedBilling (Long id, String name, String description, BigDecimal amount, Long order, LocalDateTime createdAt, Long user, Collection<LoadedPayment> payments, Statuses status, String code) {
+public record LoadedBilling (Long id, String name, String description, BigDecimal amount, String order, LocalDateTime createdAt, Long user, Collection<LoadedPayment> payments, Statuses status, String code) {
     public LoadedBilling(
             Long id,
             String name,
             String description,
             BigDecimal amount,
-            Long order,
+            String order,
             LocalDateTime createdAt,
             Long user,
             Collection<LoadedPayment> payments,

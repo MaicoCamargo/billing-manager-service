@@ -13,6 +13,6 @@ public record LoadBillingQueryParams(
         @Schema(description = "Status") Statuses status,
         @Schema(description = "Usuário") Long user,
         @Schema(description = "Code") String code,
-        @Schema(description = "Order") Long order
+        @Schema(description = "Order") String order
         ) {
 }

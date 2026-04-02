@@ -92,7 +92,7 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public Void del(Long code) {
+    public Void del(String code) {
         final Page<Billing> billingOptional = repository.findByOrderId(code, Pageable.unpaged());
         billingOptional.stream().findFirst().ifPresent(repository::delete);
         return null;
@@ -108,7 +108,7 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public Page<LoadedBilling> loadByOrder(Long order) {
+    public Page<LoadedBilling> loadByOrder(String order) {
         final Page<Billing> byOrderId = repository.findByOrderId(order, Pageable.unpaged(SORT_BY_CREATED_AT_DESC));
         return byOrderId.map(loadedBillingMapperStrategy::map);
     }
@@ -139,7 +139,7 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public LoadedBilling loadByServiceAndOrder(Long service, Long order) {
+    public LoadedBilling loadByServiceAndOrder(Long service, String order) {
         final Billing byServiceIdAndOrderId = repository.findByServiceIdAndOrderId(service, order);
         if (Objects.isNull(byServiceIdAndOrderId)) {
             return null;
