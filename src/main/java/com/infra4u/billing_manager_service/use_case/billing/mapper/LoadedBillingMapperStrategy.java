@@ -1,13 +1,12 @@
 package com.infra4u.billing_manager_service.use_case.billing.mapper;
 
 import com.infra4u.billing_manager_service.entity.Billing;
+import com.infra4u.billing_manager_service.entity.Payment;
 import com.infra4u.billing_manager_service.use_case.billing.BillingMapperStrategy;
-import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedBilling;
-import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedPayment;
-import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedStatus;
-import com.infra4u.billing_manager_service.use_case.billing.model.response.LoadedType;
+import com.infra4u.billing_manager_service.use_case.billing.model.response.*;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +16,26 @@ public class LoadedBillingMapperStrategy implements BillingMapperStrategy<Loaded
 
     @Override
     public LoadedBilling map(Billing billing) {
-        List<LoadedPayment> payments = billing.getPayments()
-                .stream()
-                .map(payment -> new LoadedPayment(payment.getId(), payment.getValue(), payment.getInstallment(), new LoadedType(payment.getPaymentType().getName(), payment.getPaymentType().getId()), payment.getExpirationDate(), LoadedStatus.of(payment.getPaymentStatuses())))
+        List<LoadedPaymentSummary> payments = billing.getPayments().stream()
+                .collect(Collectors.groupingBy(payment -> payment.getPaymentType().getId()))
+                .values().stream()
+                .map(paymentList -> {
+                    Payment last = paymentList.getLast();
+                    BigDecimal totalValue = paymentList.stream()
+                            .map(Payment::getValue)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    return new LoadedPaymentSummary(
+                            totalValue,
+                            last.getInstallment(),
+                            new LoadedType(last.getPaymentType().getName(), last.getPaymentType().getId()),
+                            last.getExpirationDate(),
+                            LoadedStatus.of(paymentList.stream()
+                                    .flatMap(p -> p.getPaymentStatuses().stream())
+                                    .toList())
+                    );
+                })
                 .toList();
-        return new LoadedBilling(billing.getId(), billing.getName(), billing.getDescription(), billing.getAmount(), billing.getOrderId(), billing.getCreatedAt(), billing.getUserId(), payments, billing.getCode());
+        return new LoadedBilling( billing.getName(), billing.getDescription(), billing.getAmount(), billing.getOrderId(), payments, billing.getCode());
     }
 
     @Override

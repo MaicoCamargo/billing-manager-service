@@ -8,26 +8,23 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 
-public record LoadedBilling (Long id, String name, String description, BigDecimal amount, String order, LocalDateTime createdAt, Long user, Collection<LoadedPayment> payments, Statuses status, String code) {
+public record LoadedBilling (String name, String description, BigDecimal amount, String order, Collection<LoadedPaymentSummary> payments, Statuses status, String code) {
     public LoadedBilling(
-            Long id,
             String name,
             String description,
             BigDecimal amount,
             String order,
-            LocalDateTime createdAt,
-            Long user,
-            Collection<LoadedPayment> payments,
+            Collection<LoadedPaymentSummary> payments,
             String code
     ) {
-        this(id, name, description, amount, order, createdAt, user, payments, calculateStatus(payments, amount), code);
+        this(name, description, amount, order, payments, calculateStatus(payments, amount), code);
     }
-    private static Statuses calculateStatus(Collection<LoadedPayment> payments, BigDecimal amount) {
+    private static Statuses calculateStatus(Collection<LoadedPaymentSummary> payments, BigDecimal amount) {
         if (Objects.isNull(payments) || payments.isEmpty()) {
             return Statuses.PENDING;
         }
         final BigDecimal totalPayments = payments.stream()
-                .map(LoadedPayment::value) // Obtém o valor de cada pagamento
+                .map(LoadedPaymentSummary::value) // Obtém o valor de cada pagamento
                 .reduce(BigDecimal.ZERO, BigDecimal::add);// Soma todos os valores
         if  (totalPayments.compareTo(amount) < 0) {
             return Statuses.PENDING;
