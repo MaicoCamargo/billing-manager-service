@@ -18,6 +18,6 @@ public interface PageFilterStrategy {
         if (Objects.isNull(pageFilter.page()) && Objects.isNull(pageFilter.size())) {
             return Pageable.unpaged(sort);
         }
-        return PageRequest.of(pageFilter.page(), pageFilter.size(), sort);
+        return PageRequest.of(pageFilter.page() <= 0  ? 0 : pageFilter.page() - 1, pageFilter.size());
     }
 }
