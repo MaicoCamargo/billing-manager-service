@@ -2,6 +2,7 @@ package com.infra4u.billing_manager_service.service;
 
 import com.infra4u.billing_manager_service.entity.*;
 import com.infra4u.billing_manager_service.exception.NotFoundException;
+import com.infra4u.billing_manager_service.exception.UnprocessableEntityException;
 import com.infra4u.billing_manager_service.use_case.billing.BillingRepository;
 import com.infra4u.billing_manager_service.use_case.billing.BillingService;
 import com.infra4u.billing_manager_service.use_case.billing.mapper.*;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -154,5 +154,21 @@ public class BillingServiceImpl implements BillingService {
         final Billing mapped = this.updateBillingMapperStrategy.map(simpleBillingUpdate);
         final Billing saved = this.repository.save(mapped);
         return loadedBillingMapperStrategy.map(saved);
+    }
+
+    /**
+     * update billing payment and amount by code
+     * @param code billing code
+     * @param data new values
+     * @return updated values
+     */
+    @Override
+    public LoadedBilling update(String code, SimpleBilling data) {
+        final Optional<Billing> first = this.repository.findByCode(code).stream().findFirst();
+        if (first.isPresent()) {
+            final Billing billing = first.get();
+            return this.update(billing.getId(), data);
+        }
+        throw new UnprocessableEntityException("BillingServiceImpl::update " + code);
     }
 }

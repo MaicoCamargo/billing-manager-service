@@ -113,5 +113,12 @@ public class BillingController {
         return Wrapper.of(billingService.update(id, simpleBilling));
     }
 
+    @PutMapping("code/{code}")
+    @Operation(summary = "Update an billing", description = "Update billing using the simple form", parameters = {
+            @Parameter(ref = "#/components/parameters/X-Client-ID")
+    })
+    public Wrapper<LoadedBilling> updateByCode(@PathVariable String code, @RequestBody SimpleBilling simpleBilling) {
+        return Wrapper.of(billingService.update(code, simpleBilling));
+    }
 
 }
