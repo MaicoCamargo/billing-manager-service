@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record FuturePayment(BigDecimal value, @JsonFormat(shape = JsonFormat.Shape.STRING) LocalDate expiresAt, Statuses status, Types type) {
-    public FuturePayment(BigDecimal value, LocalDate expiresAt, Types type) {
-        this(value, expiresAt, Statuses.PENDING, type);
+public record FuturePayment(BigDecimal value, Integer installments, @JsonFormat(shape = JsonFormat.Shape.STRING) LocalDate expiresAt, Statuses status, Types type) {
+    public FuturePayment(BigDecimal value, Integer installments, LocalDate expiresAt, Types type) {
+        this(value, installments, expiresAt, Statuses.PENDING, type);
     }
 }
