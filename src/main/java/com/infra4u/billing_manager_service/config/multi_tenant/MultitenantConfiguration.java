@@ -37,8 +37,14 @@ public class MultitenantConfiguration {
         HikariConfig hikariConfig = new HikariConfig();
 
         // Basic datasource configuration
-        hikariConfig.setDriverClassName("org.postgresql.Driver");
-        hikariConfig.setJdbcUrl(properties.getProperty("datasource.url"));
+        String driverClassName = properties.getProperty("datasource.driver-class-name", "org.postgresql.Driver");
+        hikariConfig.setDriverClassName(driverClassName);
+        String url = properties.getProperty("datasource.url");
+        if (url == null || url.isEmpty() || "url".equals(url)) {
+            log.error("Tenant '{}' has invalid URL: {}", tenantId, url);
+        }
+        log.info("Configuring DataSource for tenant '{}' with URL: {}", tenantId, url);
+        hikariConfig.setJdbcUrl(url);
         hikariConfig.setUsername(properties.getProperty("datasource.username"));
         hikariConfig.setPassword(properties.getProperty("datasource.password"));
 
@@ -90,6 +96,7 @@ public class MultitenantConfiguration {
         for (Map.Entry<String, Properties> entry : tenantProperties.entrySet()) {
             String tenantId = entry.getKey();
             Properties properties = entry.getValue();
+            log.info("Creating data source for tenant: {}", tenantId);
             HikariDataSource dataSource = createHikariDataSource(tenantId, properties);
             dataSources.put(tenantId, dataSource);
         }
