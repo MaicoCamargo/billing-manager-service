@@ -35,7 +35,11 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
                                 .withHour(23)
                                 .withMinute(59)
                                 .withSecond(59);
-                        final Payment newPayment = new Payment(payment.value().divide(BigDecimal.valueOf(payment.installments()), RoundingMode.UP), i, this.paymentType(payment.type().getId()), nextMonth, this.paymentStatuses(payment.type()));
+                        BigDecimal installmentValue = payment.value().divide(BigDecimal.valueOf(payment.installments()), RoundingMode.HALF_UP);
+                        if (i == payment.installments()) {
+                            installmentValue = payment.value().subtract(installmentValue.multiply(BigDecimal.valueOf(payment.installments() - 1)));
+                        }
+                        final Payment newPayment = new Payment(installmentValue, i, this.paymentType(payment.type().getId()), nextMonth, this.paymentStatuses(payment.type()));
                         payments.add(newPayment);
                     }
                 });
