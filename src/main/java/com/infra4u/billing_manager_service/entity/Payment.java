@@ -35,6 +35,7 @@ public class Payment {
     private Billing billing;
 
     @Getter
+    @Setter
     private Integer installment;
 
     @ManyToOne
@@ -45,6 +46,7 @@ public class Payment {
 
     @Column(name = "expiration_date")
     @Getter
+    @Setter
     private LocalDateTime expirationDate;
 
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
