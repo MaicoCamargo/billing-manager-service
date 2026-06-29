@@ -43,7 +43,7 @@ public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billin
                 billing.name(),
                 billing.description(),
                 billing.amount(),
-                billing.futurePayments().size(),
+                payments.size(),
                 billing.order(),
                 billing.service(),
                 billing.user(),
