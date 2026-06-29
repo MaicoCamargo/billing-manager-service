@@ -25,7 +25,18 @@ public class CreateBillingMapperStrategy implements BillingMapperStrategy<Billin
 
         final List<Payment> payments = billing.futurePayments()
                 .stream()
-                .map((payment) -> new Payment(payment.value(), payment.installments(), this.paymentType(payment.type().getId()), payment.expiresAt().atTime(LocalTime.MAX))).toList();
+                .flatMap((payment) -> {
+                    java.util.List<Payment> installmentPayments = new java.util.ArrayList<>();
+                    BigDecimal installmentValue = payment.value().divide(BigDecimal.valueOf(payment.installments()), java.math.RoundingMode.HALF_UP);
+                    for (int i = 1; i <= payment.installments(); i++) {
+                        BigDecimal value = installmentValue;
+                        if (i == payment.installments()) {
+                            value = payment.value().subtract(installmentValue.multiply(BigDecimal.valueOf(payment.installments() - 1)));
+                        }
+                        installmentPayments.add(new Payment(value, i, this.paymentType(payment.type().getId()), payment.expiresAt().atTime(java.time.LocalTime.MAX)));
+                    }
+                    return installmentPayments.stream();
+                }).toList();
 
         // todo verificar se valor dos pagamentos (total) nao é maior que billing.amount caso sim retornar erro
         return new Billing(
