@@ -22,7 +22,7 @@ class CreateBillingIntegrationTest {
     @Test
     @DisplayName("Verify create billing with POST /billings")
     void verifyCreateBilling() throws Exception {
-        String clientId = "myc-client-id";
+        String clientId = "test-client-id";
         String payload = """
                 {
                   "name": "test",

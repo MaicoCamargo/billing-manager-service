@@ -22,7 +22,7 @@ class BillingControllerIntegrationTest {
     @Test
     @DisplayName("Verify load billings by order ID with X-Client-ID header")
     void shouldLoadBillingByOrderWithClientId() throws Exception {
-        String clientId = "myc-client-id";
+        String clientId = "test-client-id";
 
         // Arrange (Create)
         String newOrderId = java.util.UUID.randomUUID().toString();

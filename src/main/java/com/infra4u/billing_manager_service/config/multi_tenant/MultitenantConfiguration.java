@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 @Slf4j
@@ -102,7 +103,12 @@ public class MultitenantConfiguration {
         }
 
         AbstractRoutingDataSource dataSource = new MultitenantDataSource();
-        dataSource.setDefaultTargetDataSource(dataSources.get(defaultTenant));
+        DataSource defaultDS = (DataSource) dataSources.get(defaultTenant);
+        if (defaultDS == null && !dataSources.isEmpty()) {
+            defaultDS = (DataSource) dataSources.values().iterator().next();
+            log.warn("Default tenant '{}' not found or invalid. Using '{}' as fallback default.", defaultTenant, dataSources.keySet().iterator().next());
+        }
+        dataSource.setDefaultTargetDataSource(Objects.requireNonNull(defaultDS));
         dataSource.setTargetDataSources(dataSources);
 
         dataSource.afterPropertiesSet();

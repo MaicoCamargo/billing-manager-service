@@ -22,7 +22,7 @@ class CreateSimpleBillingIntegrationTest {
     @Test
     @DisplayName("Verify create billing with POST /billings/simple using nested structure")
     void verifyCreateSimpleBilling() throws Exception {
-        String clientId = "myc-client-id";
+        String clientId = "test-client-id";
         String payload = """
                 {
                   "name": "Simple Billing",
