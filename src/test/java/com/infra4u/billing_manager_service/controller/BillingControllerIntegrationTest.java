@@ -56,6 +56,8 @@ class BillingControllerIntegrationTest {
             .andExpect(jsonPath("$.content.payments.length()").value(1))
             .andExpect(jsonPath("$.content.payments[0].installment").value(2))
             .andExpect(jsonPath("$.content.payments[0].value").value(300))
+            .andExpect(jsonPath("$.content.payments[0].status.name").value("IN_PROGRESS"))
+            .andExpect(jsonPath("$.content.payments[0].status.id").value(7))
             .andDo(result -> {
                 System.out.println("Create Response body: " + result.getResponse().getContentAsString());
             });

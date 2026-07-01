@@ -64,8 +64,8 @@ class CreateSimpleBillingIntegrationTest {
             .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].type.name").value("CREDIT_CARD"))
             .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].type.id").value(3))
             .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].expirationDate").exists())
-            .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].status.name").value("PENDING"))
-            .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].status.id").value(1))
+            .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].status.name").value("IN_PROGRESS"))
+            .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].status.id").value(7))
             .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CREDIT_CARD')].status.date").exists())
             
             .andExpect(jsonPath("$.content.payments[?(@.type.name == 'CASH_ON_DELIVERY')].value").value(100))
