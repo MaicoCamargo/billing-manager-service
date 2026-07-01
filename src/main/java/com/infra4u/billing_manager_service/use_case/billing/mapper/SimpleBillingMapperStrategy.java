@@ -39,7 +39,7 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
                         if (i == payment.installments()) {
                             installmentValue = payment.value().subtract(installmentValue.multiply(BigDecimal.valueOf(payment.installments() - 1)));
                         }
-                        final Payment newPayment = new Payment(installmentValue, i, this.paymentType(payment.type().getId()), nextMonth, this.paymentStatuses(payment.type()));
+                        final Payment newPayment = new Payment(installmentValue, i, this.paymentType(payment.type().getId()), nextMonth, this.paymentStatuses(payment.type(), nextMonth));
                         payments.add(newPayment);
                     }
                 });
@@ -66,11 +66,11 @@ public class SimpleBillingMapperStrategy implements BillingMapperStrategy<Billin
         return new PaymentType(type.name(), type.getId());
     }
 
-    private List<PaymentStatus> paymentStatuses(final Types type) {
-
+    private List<PaymentStatus> paymentStatuses(final Types type, LocalDateTime expirationDate) {
         final ArrayList<PaymentStatus> statuses = new ArrayList<>();
-        PaymentStatus pending = new PaymentStatus(new Status(Statuses.PENDING.getId(), Statuses.PENDING.name()));
-        statuses.add(pending);
+        Statuses baseStatusType = (expirationDate != null && expirationDate.isAfter(LocalDateTime.now())) ? Statuses.IN_PROGRESS : Statuses.PENDING;
+        PaymentStatus baseStatus = new PaymentStatus(new Status(baseStatusType.getId(), baseStatusType.name()));
+        statuses.add(baseStatus);
         if (Types.CASH_ON_DELIVERY.name().equals(type.name()) || Types.DEBIT_CARD.name().equals(type.name())) {
              PaymentStatus paid = new PaymentStatus(new Status(Statuses.COMPLETED.getId(), Statuses.COMPLETED.name()));
              statuses.add(paid);
