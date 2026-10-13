@@ -1,0 +1,37 @@
+name: build-and-deploy
+
+# Roda no Forgejo Actions (runner no Alpine). Build da imagem, push para o registry do
+# Forgejo e deploy via chave SSH restrita (~/source/scripts/deploy.sh no servidor).
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+env:
+  REGISTRY: localhost:3030
+  IMAGE: localhost:3030/maicocamargo.dev/billing-manager-service
+
+jobs:
+  build-and-deploy:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login no registry
+        run: echo "${{ secrets.REGISTRY_TOKEN }}" | docker login $REGISTRY -u maicocamargo.dev --password-stdin
+
+      - name: Build da imagem
+        run: docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
+
+      - name: Push
+        run: |
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
+
+      - name: Deploy no Alpine
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          install -m 700 -d ~/.ssh
+          printf "%s\n" "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          printf "%s\n" "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes angry@192.168.31.171 "billing billing-manager-service ${{ github.sha }}"
